@@ -1,12 +1,12 @@
-# Passive Radar Mission Control Demo
+# Urban Passive Radar for LEO Debris Detection Dashboard Demo
 
-Static browser demo for presenting a passive radar space-surveillance concept with:
+Static browser demo for presenting our project idea in an interactive way! Demo uses the following passive bistatic geometry:
 
 - `PNU Radio Telescope` as the RX node
 - `Riyadh TV Tower` as the TX node
 - `ISS` as the tracked object
 
-RX/TX coordinates are taken from the project study table:
+RX/TX coordinates are taken from google maps:
 
 - `PNU`: `24.856155, 46.72139`
 - `Riyadh TV Tower`: `24.64322, 46.6960`
