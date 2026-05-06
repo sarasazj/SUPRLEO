@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UPR-LEO Passive Radar Analytics Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="dashboard-page dashboard-page--analytics" data-page-mode="dashboard">
+  <noscript>
+    <div class="noscript-banner">This dashboard needs JavaScript enabled to render the live geometry and telemetry.</div>
+  </noscript>
+
+  <div class="analytics-shell">
+    <header class="analytics-header">
+      <a class="brand" href="index.html" aria-label="Open scene visualizer">
+        <span class="brand__mark">UPR</span>
+        <span>
+          <span class="eyebrow">Urban Passive Radar for Space Debris Detection</span>
+          <strong>UPR-LEO Mission Analytics Dashboard</strong>
+        </span>
+      </a>
+
+      <nav class="top-nav" aria-label="Mission pages">
+        <a href="index.html">Visualizer</a>
+        <a class="is-active" href="storyline.html">Dashboard</a>
+      </nav>
+
+      <div class="header-status" aria-live="polite">
+        <span id="modeBadge" class="status-pill status-pill--active">Demo orbit</span>
+        <span id="storyBadge" class="status-pill">Analytics</span>
+        <span id="selectionBadge" class="status-pill">Focus: ISS</span>
+      </div>
+    </header>
+
+    <main class="analytics-grid">
+      <section class="analytics-card analytics-card--map">
+        <div class="card-heading">
+          <span class="eyebrow">Visualizer Reference</span>
+          <h1>Passive bistatic radar scene</h1>
+          <p>The globe shows the Riyadh illuminator, the PNU receiver, the ISS target, LEO objects, and the three ranges used by the dashboard calculations.</p>
+        </div>
+
+        <div class="dashboard-scene-wrap">
+          <div id="sceneMount" class="scene-mount" aria-label="Interactive 3D Earth passive radar visualizer"></div>
+          <div id="overlayLabelLayer" class="label-layer" aria-hidden="true"></div>
+        </div>
+
+        <div class="scene-control-row scene-control-row--dashboard">
+          <button id="playPauseButton" type="button">Pause Orbit</button>
+          <button id="focusIssButton" type="button">Focus ISS</button>
+          <button id="resetViewButton" type="button">Reset View</button>
+          <button id="retryLiveButton" type="button">Retry Live Feed</button>
+        </div>
+
+        <div class="layer-toggle-row" aria-label="Scene layers">
+          <label><input id="toggleRx" type="checkbox" checked /> RX node</label>
+          <label><input id="toggleTx" type="checkbox" checked /> TX node</label>
+          <label><input id="toggleGrid" type="checkbox" checked /> Grid</label>
+          <label><input id="toggleOrbit" type="checkbox" checked /> ISS orbit</label>
+          <label><input id="toggleDebris" type="checkbox" checked /> LEO objects</label>
+          <label><input id="toggleLinks" type="checkbox" checked /> Radar links</label>
+        </div>
+      </section>
+
+      <section class="analytics-card analytics-card--pass">
+        <div class="card-heading card-heading--compact">
+          <span class="eyebrow">Pass Summary</span>
+          <h2>ISS tracking window</h2>
+          <p>The pass board uses N2YO radio-pass data for the ISS over the PNU receiver when an API key is available, then falls back to the demo orbit estimate.</p>
+        </div>
+
+        <div class="mission-clock">
+          <span id="passStatusValue" class="mission-clock__state">Tracking</span>
+          <strong id="timeToClosestPassValue">--:--:--</strong>
+          <span>time to max elevation</span>
+        </div>
+
+        <div class="progress-track" aria-hidden="true">
+          <span id="passProgressFill"></span>
+        </div>
+
+        <div class="pass-stat-grid">
+          <div>
+            <span>Altitude</span>
+            <strong id="issAltitudeValue">-- km</strong>
+          </div>
+          <div>
+            <span>Orbital speed</span>
+            <strong id="issSpeedValue">-- km/s</strong>
+          </div>
+          <div>
+            <span>Pass window</span>
+            <strong id="passWindowValue">--</strong>
+          </div>
+          <div>
+            <span>Max elevation</span>
+            <strong id="n2yoMaxElevationValue">-- deg</strong>
+          </div>
+          <div>
+            <span>Pass azimuth</span>
+            <strong id="n2yoPassAzimuthValue">--</strong>
+          </div>
+          <div>
+            <span>Pass source</span>
+            <strong id="n2yoPassSourceValue">Demo estimate</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="analytics-card analytics-card--geometry">
+        <div class="card-heading card-heading--compact">
+          <span class="eyebrow">Bistatic Geometry</span>
+          <h2>TX - target - RX path</h2>
+          <p>The dashboard uses geometry-backed ranges only. Detection-performance outputs stay qualitative until full transmitter and receiver parameters are supplied.</p>
+        </div>
+
+        <div class="geometry-metrics">
+          <div><span>Baseline</span><strong id="dashboardBaselineValue">-- km</strong></div>
+          <div><span>TX to ISS</span><strong id="dashboardTxTargetValue">-- km</strong></div>
+          <div><span>ISS to RX</span><strong id="dashboardTargetRxValue">-- km</strong></div>
+          <div><span>Bistatic path</span><strong id="dashboardBistaticValue">-- km</strong></div>
+          <div><span>Excess delay</span><strong id="dashboardDelayValue">-- us</strong></div>
+          <div><span>Bistatic angle</span><strong id="dashboardBistaticAngleValue">-- deg</strong></div>
+        </div>
+      </section>
+
+      <section class="analytics-card analytics-card--kpis">
+        <div class="analytics-kpi-strip">
+          <article>
+            <span>TX-RX baseline</span>
+            <strong id="heroBaselineValue">-- km</strong>
+            <small>PNU receiver to Riyadh TV Tower</small>
+          </article>
+          <article>
+            <span>Total bistatic path</span>
+            <strong id="heroPathValue">-- km</strong>
+            <small>TX -> ISS plus ISS -> RX</small>
+          </article>
+          <article>
+            <span>Excess path delay</span>
+            <strong id="heroDelayValue">-- us</strong>
+            <small>Over direct TX -> RX baseline</small>
+          </article>
+        </div>
+
+        <div class="metric-header">
+          <div>
+            <span class="eyebrow">Calculation Cards</span>
+            <h2>Live passive-radar measurements</h2>
+          </div>
+          <span id="metricsModeTag" class="data-chip">Geometry only</span>
+        </div>
+        <div id="metricsGrid" class="metrics-grid metrics-grid--dashboard"></div>
+      </section>
+
+      <section class="analytics-card analytics-card--opportunity">
+        <div class="card-heading card-heading--compact">
+          <span class="eyebrow">Radar Opportunity</span>
+          <h2>Geometry readiness</h2>
+          <p>This score summarizes whether the current bistatic geometry is useful for a demonstration. It is not an SNR prediction.</p>
+        </div>
+
+        <div class="opportunity-readout">
+          <div class="opportunity-ring" aria-hidden="true">
+            <span id="opportunityGaugeFill"></span>
+            <strong id="opportunityGaugeValue">--%</strong>
+          </div>
+          <div class="opportunity-notes">
+            <div><span>Estimated Doppler class</span><strong id="dopplerEstimateValue">--</strong></div>
+            <div><span>Geometry quality</span><strong id="geometryQualityValue">--</strong></div>
+            <div><span>Range resolution model</span><strong id="rangeResolutionValue">--</strong></div>
+            <div><span>Processing assumption</span><strong id="coherentProcessingValue">DVB-T correlation</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="analytics-card analytics-card--nodes">
+        <div class="card-heading card-heading--compact">
+          <span class="eyebrow">Ground Segment</span>
+          <h2>Study nodes used in this demo</h2>
+          <p>The demo uses exact study coordinates for the Riyadh illuminator and PNU radio telescope receiver.</p>
+        </div>
+
+        <div class="node-card-grid">
+          <article class="node-card node-card--tx">
+            <span class="node-card__role">TX illuminator</span>
+            <h3>Riyadh TV Tower</h3>
+            <p id="txNodeRole">Non-cooperative DVB-T / DVB-T2 broadcast source used as an illuminator of opportunity.</p>
+            <dl>
+              <div><dt>Coordinates</dt><dd id="txNodeCoords">24.64322 N, 46.69600 E</dd></div>
+              <div><dt>Band</dt><dd id="txNodeBand">470-694 MHz UHF</dd></div>
+              <div><dt>Signal</dt><dd id="txNodeSignal">DVB-T / DVB-T2</dd></div>
+            </dl>
+          </article>
+
+          <article class="node-card node-card--rx">
+            <span class="node-card__role">RX receiver</span>
+            <h3>PNU Radio Telescope</h3>
+            <p id="rxNodeRole">Passive receiver site for reference and surveillance-channel processing in the UPR concept.</p>
+            <dl>
+              <div><dt>Coordinates</dt><dd id="rxNodeCoords">24.856155 N, 46.72139 E</dd></div>
+              <div><dt>Aperture</dt><dd id="rxNodeAperture">5 m parabolic dish</dd></div>
+              <div><dt>Bandwidth</dt><dd id="rxNodeBandwidth">50 MHz receiver model</dd></div>
+            </dl>
+          </article>
+        </div>
+      </section>
+
+      <section class="analytics-card analytics-card--pipeline">
+        <div class="card-heading card-heading--compact">
+          <span class="eyebrow">Signal Chain</span>
+          <h2>What the UPR system is demonstrating</h2>
+          <p>Urban Passive Radar reuses existing Saudi broadcast infrastructure to detect LEO targets without transmitting a dedicated radar signal.</p>
+        </div>
+
+        <ol class="pipeline-steps">
+          <li><span>1</span><strong>Reference capture</strong><p>Receive the direct DVB-T waveform from the Riyadh TV Tower.</p></li>
+          <li><span>2</span><strong>Surveillance capture</strong><p>Listen for the same waveform reflected by the ISS or another LEO object.</p></li>
+          <li><span>3</span><strong>Clutter suppression</strong><p>Reduce strong direct-path and ground multipath components before detection.</p></li>
+          <li><span>4</span><strong>CAF / range-Doppler</strong><p>Correlate reference and surveillance channels to reveal delay and Doppler peaks.</p></li>
+          <li><span>5</span><strong>Detection support</strong><p>Use thresholding and classification to separate candidate objects from interference.</p></li>
+        </ol>
+      </section>
+
+      <section class="analytics-card analytics-card--context">
+        <div class="card-heading card-heading--compact">
+          <span class="eyebrow">SSA Context</span>
+          <h2>Why this demo matters</h2>
+          <p>LEO is becoming harder to monitor. The debris facts below frame the problem, while the dashboard keeps the project focus on low-cost passive surveillance.</p>
+        </div>
+
+        <div class="context-grid">
+          <article>
+            <span>Tracked large objects</span>
+            <strong>&gt;34,000</strong>
+            <p>Objects larger than 10 cm are routinely tracked in current debris catalogs.</p>
+          </article>
+          <article>
+            <span>Small debris estimate</span>
+            <strong>~900,000</strong>
+            <p>Objects from 1-10 cm are difficult to track but can still damage spacecraft.</p>
+          </article>
+          <article>
+            <span>High-risk shell</span>
+            <strong>700-2,000 km</strong>
+            <p>Many long-lived debris populations occupy the same orbital region used by LEO missions.</p>
+          </article>
+          <article>
+            <span>Catalog snapshot</span>
+            <strong id="leoTrackedValue">--</strong>
+            <p id="leoDashboardMeta">Waiting for catalog feed or fallback snapshot.</p>
+          </article>
+        </div>
+
+        <div class="debris-dashboard-mini">
+          <div>
+            <span class="data-chip" id="leoFeedTag">Debris context</span>
+            <h3>Live/fallback catalog indicators</h3>
+            <dl class="mini-stat-list">
+              <div><dt>LEO band</dt><dd id="leoLeoBandValue">--</dd></div>
+              <div><dt>Debris objects</dt><dd id="leoDebrisValue">--</dd></div>
+              <div><dt>24h conjunction alerts</dt><dd id="leoConjunctionValue">--</dd></div>
+              <div><dt>Critical risk items</dt><dd id="leoCriticalValue">--</dd></div>
+              <div><dt>Upcoming reentries</dt><dd id="leoReentryValue">--</dd></div>
+              <div><dt>LeoLabs tracked objects</dt><dd id="leolabsObjectsValue">--</dd></div>
+            </dl>
+          </div>
+
+          <div class="mini-chart-grid">
+            <div class="mini-chart-card">
+              <svg id="leoCatalogDonut" viewBox="0 0 160 160" role="img" aria-label="Object catalog distribution"></svg>
+              <strong id="leoCatalogCenter">--</strong>
+              <div id="leoCatalogLegend" class="chart-legend"></div>
+            </div>
+            <div class="mini-chart-card">
+              <svg id="leoRiskDonut" viewBox="0 0 160 160" role="img" aria-label="Conjunction risk distribution"></svg>
+              <strong id="leoRiskCenter">--</strong>
+              <div id="leoRiskLegend" class="chart-legend"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="source-row">
+          <span id="leoSourceMeta">Project PDF facts plus live/fallback catalog snapshots.</span>
+          <span id="leolabsLatencyValue">Latency: --</span>
+          <span id="leolabsAccuracyValue">Accuracy: --</span>
+          <span id="leolabsPrecisionValue">Precision: --</span>
+        </div>
+      </section>
+
+      <section class="analytics-card analytics-card--support">
+        <div class="card-heading card-heading--compact">
+          <span class="eyebrow">Selected Focus</span>
+          <h2>Scene context</h2>
+        </div>
+        <article id="focusCard" class="focus-card">
+          <span id="focusRoleTag" class="data-chip">Live target</span>
+          <h3 id="snapshotSelection">ISS</h3>
+          <p id="snapshotNarrative">Select the ISS, RX node, or TX node in the scene to update this explanation.</p>
+          <div id="focusDetails" class="focus-details"></div>
+        </article>
+
+        <div class="tle-box">
+          <span class="eyebrow">ISS TLE Reference</span>
+          <code id="issTleLine1">1 25544U 98067A ...</code>
+          <code id="issTleLine2">2 25544 ...</code>
+        </div>
+      </section>
+    </main>
+
+    <footer class="telemetry-ribbon telemetry-ribbon--analytics" aria-live="polite">
+      <span class="eyebrow">Telemetry Tape</span>
+      <strong id="tickerStatus">Geometry starting...</strong>
+      <div id="tickerTrack" class="ticker-track"></div>
+    </footer>
+  </div>
+
+  <div class="dashboard-hidden" aria-hidden="true">
+    <article id="storyCard">
+      <span id="storyStepTag"></span>
+      <h2 id="storyTitle"></h2>
+      <p id="storyDescription"></p>
+      <div id="storyProgress"></div>
+      <button id="nextStoryButton" type="button"></button>
+      <button id="skipStoryButton" type="button"></button>
+      <button id="restartStoryButton" type="button"></button>
+    </article>
+
+    <div id="contentSections"></div>
+    <svg id="leoTrendSvg" viewBox="0 0 320 120"></svg>
+    <span id="leoTrendDelta"></span>
+    <span id="leoTrendCaption"></span>
+    <div id="leolabsPerfBars"></div>
+    <div id="leolabsCoverageBadges"></div>
+  </div>
+
+  <script src="./vendor/three.min.js"></script>
+  <script src="./n2yo-config.js"></script>
+  <script src="./n2yo-passes.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

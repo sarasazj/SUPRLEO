@@ -1,0 +1,35 @@
+name: Update N2YO ISS Passes
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */12 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-passes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Refresh N2YO pass snapshot
+        env:
+          N2YO_API_KEY: ${{ secrets.N2YO_API_KEY }}
+          N2YO_LOOKAHEAD_DAYS: "10"
+        run: node scripts/update-n2yo-passes.mjs
+
+      - name: Commit updated pass snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add n2yo-passes.js
+          git diff --cached --quiet || git commit -m "Update N2YO ISS pass snapshot"
+          git push

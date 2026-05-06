@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Passive Radar Visualizer</title>
+  <meta
+    name="description"
+    content="Scene-first passive radar visualizer showing the RX node, TX node, ISS target, and dense LEO traffic."
+  >
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="visualizer-only" data-page-mode="visualizer">
+  <main class="stage-shell stage-shell--full">
+    <div class="stage-backdrop"></div>
+    <div class="scene-mount" id="sceneMount" aria-label="3D passive radar scene"></div>
+
+    <div class="stage-overlay stage-overlay--minimal">
+      <div class="command-deck command-deck--minimal">
+        <div class="command-brand">
+          <div class="command-brand__mark">UPR</div>
+          <div class="command-brand__copy">
+            <p class="eyebrow">Urban Passive Radar for Space Debris Detection</p>
+            <p class="command-brand__title">UPR-LEO</p>
+          </div>
+        </div>
+
+        <nav class="command-nav" aria-label="Dashboard pages">
+          <a class="nav-chip nav-chip--link is-active" href="./index.html">Visualizer</a>
+          <a class="nav-chip nav-chip--link" href="./storyline.html">Storyline</a>
+        </nav>
+      </div>
+
+      <div class="visualizer-status">
+        <div class="status-strip">
+          <span class="status-pill status-pill--accent" id="modeBadge">Connecting</span>
+          <span class="status-pill" id="storyBadge">Explore</span>
+          <span class="status-pill" id="selectionBadge">Focus: TX</span>
+        </div>
+      </div>
+
+      <section class="scene-controls scene-controls--floating">
+        <button class="secondary-button" id="playPauseButton" type="button">Pause Orbit</button>
+        <button class="secondary-button" id="focusIssButton" type="button">Focus ISS</button>
+        <button class="secondary-button" id="resetViewButton" type="button">Reset View</button>
+        <button class="ghost-button" id="retryLiveButton" type="button">Retry Live Feed</button>
+      </section>
+
+      <section class="layer-toggle-row">
+        <label><input type="checkbox" id="toggleRx" checked> RX Node</label>
+        <label><input type="checkbox" id="toggleTx" checked> TX Node</label>
+        <label><input type="checkbox" id="toggleGrid" checked> Grid</label>
+        <label><input type="checkbox" id="toggleOrbit" checked> ISS Orbit</label>
+        <label><input type="checkbox" id="toggleDebris" checked> LEO Objects</label>
+        <label><input type="checkbox" id="toggleLinks" checked> Radar Links</label>
+      </section>
+
+      <section class="ticker-bar ticker-bar--minimal" aria-label="Orbital telemetry ribbon">
+        <div class="ticker-status">
+          <span class="ticker-status__label">Telemetry Tape</span>
+          <strong id="tickerStatus">Initializing orbital feed</strong>
+        </div>
+        <div class="ticker-track" id="tickerTrack"></div>
+      </section>
+
+      <div class="overlay-label-layer" id="overlayLabelLayer" aria-hidden="true"></div>
+    </div>
+  </main>
+
+  <section class="vis-placeholder" aria-hidden="true">
+    <div id="storyCard" hidden>
+      <p id="storyStepTag"></p>
+      <h2 id="storyTitle"></h2>
+      <p id="storyDescription"></p>
+      <button id="nextStoryButton" type="button">Next</button>
+      <button id="skipStoryButton" type="button">Skip</button>
+      <button id="restartStoryButton" type="button">Restart</button>
+    </div>
+    <div id="storyProgress"></div>
+    <div id="heroBaselineValue"></div>
+    <div id="heroPathValue"></div>
+    <div id="heroDelayValue"></div>
+    <div id="heroModeValue"></div>
+    <div id="metricsGrid"></div>
+    <div id="metricsModeTag"></div>
+    <div id="focusCard"></div>
+    <div id="focusRoleTag"></div>
+    <div id="snapshotSelection"></div>
+    <div id="snapshotNarrative"></div>
+    <div id="contentSections"></div>
+    <div id="leoTrackedValue"></div>
+    <div id="leoLeoBandValue"></div>
+    <div id="leoDebrisValue"></div>
+    <div id="leoConjunctionValue"></div>
+    <div id="leoCriticalValue"></div>
+    <div id="leoReentryValue"></div>
+    <div id="leolabsObjectsValue"></div>
+    <div id="leolabsLatencyValue"></div>
+    <div id="leolabsAccuracyValue"></div>
+    <div id="leolabsPrecisionValue"></div>
+    <div id="leoCatalogDonut"></div>
+    <div id="leoCatalogCenter"></div>
+    <div id="leoCatalogLegend"></div>
+    <div id="leoRiskDonut"></div>
+    <div id="leoRiskCenter"></div>
+    <div id="leoRiskLegend"></div>
+    <div id="leoTrendSvg"></div>
+    <div id="leoTrendDelta"></div>
+    <div id="leoTrendCaption"></div>
+    <div id="leolabsPerfBars"></div>
+    <div id="leolabsCoverageBadges"></div>
+    <div id="leoDashboardMeta"></div>
+    <div id="issTleLine1"></div>
+    <div id="issTleLine2"></div>
+    <div id="leoSourceMeta"></div>
+    <div id="leoFeedTag"></div>
+  </section>
+
+  <noscript>
+    <div class="noscript-banner">
+      JavaScript is required to run the passive radar dashboard.
+    </div>
+  </noscript>
+
+  <script src="./vendor/three.min.js"></script>
+  <script src="./n2yo-config.js"></script>
+  <script src="./n2yo-passes.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
