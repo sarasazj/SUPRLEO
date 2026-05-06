@@ -28,20 +28,30 @@ Open one of these in a modern browser:
 
 The demo is designed to work offline after load. If the live ISS API is unreachable or blocked, it falls back automatically to a scripted orbit path.
 
-## GitHub Pages And N2YO Updates
+ N2YO Updates
 
-GitHub Pages serves this as a static site, so live N2YO pass data should be refreshed into `n2yo-passes.js`.
+ live N2YO pass data should be refreshed into `n2yo-passes.js`.
 
-Before publishing publicly, do not put the N2YO key in `n2yo-config.js`. Instead, add it as a GitHub repository secret named `N2YO_API_KEY`.
 
-The workflow in `.github/workflows/update-n2yo-passes.yml` refreshes `n2yo-passes.js` every 12 hours and can also be run manually from the GitHub Actions tab.
+The workflow in `.github/workflows/update-n2yo-passes.yml` refreshes `n2yo-passes.js` every 12 hours ensuring ISS pass predications are updated automatically.
 
-## Replace Placeholder Research Copy
+## Sources and Data References
 
-Update the `CONTENT_SECTIONS` object in `app.js` to add:
+This project uses public and project-specific sources for visualization, pass prediction, and space situational awareness context.
 
-- your final project overview
-- passive radar explanation
-- LEO debris statistics
-- project aims
-- references and example websites
+- **N2YO REST API:** Used for ISS radio-pass predictions over the PNU receiver site. ISS NORAD ID: `25544`.  
+  https://www.n2yo.net/api/
+- **Where the ISS at? API:** Used as an optional live ISS position source for latitude, longitude, altitude, and velocity.  
+  https://wheretheiss.at/w/developer
+- **OrbitSmith:** Used as a reference for LEO catalog visualization style, tracked-object categories, and debris-dashboard inspiration.  
+  https://orbitsmith.net/
+- **LeoLabs System Metrics:** Used for public SSA context such as tracked-object/system performance metrics.  
+  https://api.leolabs.space/system_metrics
+- **Three.js:** Used as the local 3D rendering library for the Earth scene and interactive visualizer.  
+  https://threejs.org/
+- **Three.js Earth texture examples:** Used as reference/source material for Earth surface, clouds, lights, normal, and specular textures.  
+  https://github.com/mrdoob/three.js/tree/dev/examples/textures/planets
+
+This dashboard is for educational and demonstration purposes only. It is not intended for operational satellite tracking, collision avoidance, or safety-critical space surveillance decisions.
+
+
