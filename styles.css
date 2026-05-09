@@ -2174,3 +2174,484 @@ body.dashboard-page--analytics {
     inset: auto 0.5rem 0.5rem 0.5rem;
   }
 }
+
+@media (max-width: 680px) {
+  html {
+    min-height: 100%;
+    background: #030a14;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-size: 15px;
+  }
+
+  button,
+  a,
+  label {
+    -webkit-tap-highlight-color: rgba(103, 237, 255, 0.18);
+  }
+
+  .visualizer-only {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    background: #030a14;
+  }
+
+  .visualizer-only::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: #030a14;
+  }
+
+  .visualizer-only .stage-shell--full {
+    height: 100vh;
+    min-height: 100vh;
+    height: 100dvh;
+    min-height: 100dvh;
+    background: #030a14;
+  }
+
+  .visualizer-only .stage-overlay--minimal {
+    position: absolute;
+    inset: 0;
+    height: 100vh;
+    height: 100dvh;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto auto auto;
+    gap: 0.55rem;
+    padding:
+      max(0.58rem, env(safe-area-inset-top))
+      max(0.58rem, env(safe-area-inset-right))
+      max(0.7rem, env(safe-area-inset-bottom))
+      max(0.58rem, env(safe-area-inset-left));
+    overflow: hidden;
+  }
+
+  .visualizer-only .overlay-label-layer {
+    z-index: 1;
+  }
+
+  .visualizer-only .command-deck--minimal,
+  .visualizer-only .visualizer-status,
+  .visualizer-only .scene-controls--floating,
+  .visualizer-only .layer-toggle-row,
+  .visualizer-only .ticker-bar--minimal {
+    position: relative;
+    z-index: 30;
+  }
+
+  .visualizer-only .screen-tag {
+    z-index: 1;
+  }
+
+  .visualizer-only .command-deck--minimal {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: 0.55rem;
+    width: 100%;
+    padding: 0.58rem;
+    border-radius: 20px;
+  }
+
+  .command-brand {
+    min-width: 0;
+    gap: 0.55rem;
+  }
+
+  .command-brand__mark,
+  .brand__mark {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 auto;
+    font-size: 0.64rem;
+    letter-spacing: 0.05em;
+  }
+
+  .visualizer-only .command-brand .eyebrow {
+    display: none;
+  }
+
+  .command-brand__title {
+    font-size: 1rem;
+  }
+
+  .visualizer-only .command-nav {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    flex-wrap: nowrap;
+    justify-content: stretch;
+    gap: 0.35rem;
+  }
+
+  .nav-chip {
+    justify-content: center;
+    min-height: 38px;
+    padding: 0.48rem 0.55rem;
+    font-size: 0.56rem;
+    letter-spacing: 0.08em;
+  }
+
+  .visualizer-status {
+    justify-content: stretch;
+  }
+
+  .status-strip {
+    width: 100%;
+    max-width: none;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    overflow-x: auto;
+    padding-bottom: 0.05rem;
+    scrollbar-width: none;
+  }
+
+  .status-strip::-webkit-scrollbar,
+  .layer-toggle-row::-webkit-scrollbar,
+  .ticker-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .status-pill,
+  .panel-tag,
+  .legend-chip {
+    flex: 0 0 auto;
+    min-height: 34px;
+    padding: 0.42rem 0.62rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+  }
+
+  .visualizer-only .scene-controls--floating {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: 0.45rem;
+  }
+
+  .visualizer-only .scene-controls button,
+  .scene-control-row button {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.64rem 0.65rem;
+    font-size: 0.82rem;
+  }
+
+  .layer-toggle-row {
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 0.5rem;
+    border-radius: 16px;
+  }
+
+  .layer-toggle-row label {
+    flex: 0 0 auto;
+    min-height: 34px;
+    padding: 0 0.05rem;
+    font-size: 0.68rem;
+    white-space: nowrap;
+  }
+
+  .ticker-bar--minimal,
+  .telemetry-ribbon--analytics {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+    padding: 0.62rem 0.7rem;
+    border-radius: 16px;
+  }
+
+  .ticker-status {
+    min-width: 0;
+  }
+
+  .ticker-status strong,
+  .telemetry-ribbon--analytics strong {
+    font-size: 0.82rem;
+    line-height: 1.25;
+  }
+
+  .ticker-track {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 0.4rem;
+    padding-bottom: 0.05rem;
+  }
+
+  .ticker-pill {
+    flex: 0 0 auto;
+    max-width: 88vw;
+    padding: 0.38rem 0.52rem;
+    font-size: 0.62rem;
+    white-space: nowrap;
+  }
+
+  .screen-tag {
+    min-width: 100px;
+    max-width: 44vw;
+    padding: 0.44rem 0.5rem;
+    border-radius: 12px;
+  }
+
+  .screen-tag--line {
+    min-width: 112px;
+  }
+
+  .screen-tag strong,
+  .metric-card strong {
+    font-size: 0.8rem;
+  }
+
+  .screen-tag span,
+  .metric-card span {
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+  }
+
+  .analytics-shell {
+    padding:
+      max(0.52rem, env(safe-area-inset-top))
+      max(0.52rem, env(safe-area-inset-right))
+      max(0.8rem, env(safe-area-inset-bottom))
+      max(0.52rem, env(safe-area-inset-left));
+    gap: 0.65rem;
+  }
+
+  .analytics-header {
+    top: 0.45rem;
+    grid-template-columns: 1fr;
+    gap: 0.62rem;
+    padding: 0.68rem;
+    border-radius: 18px;
+  }
+
+  .brand {
+    min-width: 0;
+    gap: 0.6rem;
+  }
+
+  .brand .eyebrow {
+    display: block;
+    max-width: 250px;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    line-height: 1.35;
+  }
+
+  .brand strong {
+    max-width: 260px;
+    font-size: 1rem;
+    line-height: 1.1;
+  }
+
+  .top-nav {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-self: stretch;
+    gap: 0.3rem;
+  }
+
+  .top-nav a {
+    display: grid;
+    place-items: center;
+    min-height: 42px;
+    padding: 0.55rem 0.45rem;
+    font-size: 0.6rem;
+  }
+
+  .header-status {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.05rem;
+    scrollbar-width: none;
+  }
+
+  .header-status::-webkit-scrollbar {
+    display: none;
+  }
+
+  .analytics-grid {
+    gap: 0.65rem;
+  }
+
+  .analytics-card {
+    border-radius: 18px;
+  }
+
+  .analytics-card--map,
+  .analytics-card--pass,
+  .analytics-card--geometry,
+  .analytics-card--opportunity,
+  .analytics-card--support,
+  .analytics-card--kpis,
+  .analytics-card--nodes,
+  .analytics-card--pipeline,
+  .analytics-card--context {
+    padding: 0.72rem;
+  }
+
+  .analytics-card--map {
+    grid-template-rows: auto minmax(315px, 53vh) auto auto;
+    gap: 0.62rem;
+  }
+
+  .dashboard-scene-wrap {
+    min-height: 315px;
+    border-radius: 16px;
+  }
+
+  .card-heading {
+    gap: 0.25rem;
+  }
+
+  .card-heading h1 {
+    font-size: 1.28rem;
+  }
+
+  .card-heading h2,
+  .metric-header h2 {
+    font-size: 1.08rem;
+  }
+
+  .card-heading p {
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .analytics-card--map .card-heading p {
+    display: none;
+  }
+
+  .scene-control-row--dashboard {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+
+  .analytics-card--map .layer-toggle-row {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .mission-clock {
+    padding: 0.78rem;
+    border-radius: 16px;
+  }
+
+  .mission-clock strong {
+    font-size: 2.25rem;
+  }
+
+  .pass-stat-grid,
+  .geometry-metrics,
+  .analytics-kpi-strip,
+  .context-grid,
+  .mini-stat-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.52rem;
+  }
+
+  .metrics-grid--dashboard,
+  .node-card-grid,
+  .pipeline-steps,
+  .debris-dashboard-mini,
+  .mini-chart-grid,
+  .opportunity-readout {
+    grid-template-columns: 1fr;
+  }
+
+  .pass-stat-grid div,
+  .geometry-metrics div,
+  .opportunity-notes div,
+  .context-grid article,
+  .mini-stat-list div,
+  .analytics-kpi-strip article {
+    padding: 0.62rem;
+    border-radius: 13px;
+  }
+
+  .pass-stat-grid span,
+  .geometry-metrics span,
+  .opportunity-notes span,
+  .context-grid span,
+  .mini-stat-list dt,
+  .analytics-kpi-strip span,
+  .analytics-kpi-strip small {
+    font-size: 0.58rem;
+    letter-spacing: 0.07em;
+  }
+
+  .pass-stat-grid strong,
+  .geometry-metrics strong,
+  .opportunity-notes strong,
+  .mini-stat-list dd {
+    font-size: 0.9rem;
+  }
+
+  .analytics-kpi-strip strong,
+  .context-grid strong {
+    font-size: 1.18rem;
+  }
+
+  .metric-header {
+    align-items: start;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .opportunity-ring {
+    width: 122px;
+    height: 122px;
+  }
+
+  .node-card,
+  .pipeline-steps li {
+    padding: 0.76rem;
+    border-radius: 15px;
+  }
+
+  .pipeline-steps li {
+    min-height: auto;
+  }
+
+  .mini-chart-card svg {
+    width: 112px;
+    height: 112px;
+  }
+
+  .source-row {
+    gap: 0.38rem;
+  }
+
+  .source-row span {
+    border-radius: 12px;
+    font-size: 0.6rem;
+  }
+
+  .tle-box code {
+    font-size: 0.64rem;
+  }
+}
+
+@media (max-width: 390px) {
+  .brand .eyebrow,
+  .brand strong {
+    max-width: 220px;
+  }
+
+  .pass-stat-grid,
+  .geometry-metrics,
+  .analytics-kpi-strip,
+  .context-grid,
+  .mini-stat-list {
+    grid-template-columns: 1fr;
+  }
+}

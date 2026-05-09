@@ -16,6 +16,7 @@
   const N2YO_TIMEOUT_MS = 9000;
   const N2YO_PASS_LOOKAHEAD_DAYS = 3;
   const N2YO_MIN_ELEVATION_DEGREES = 5;
+  const PHONE_MEDIA_QUERY = window.matchMedia ? window.matchMedia("(max-width: 700px)") : null;
   const ORBITSMITH_API_BASE = "https://orbitsmith-api.orbitsmith-space.workers.dev";
   const ORBITSMITH_POLL_INTERVAL_MS = 5 * 60 * 1000;
   const ORBITSMITH_TIMEOUT_MS = 8000;
@@ -818,7 +819,7 @@
 
   function initScene() {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(getScenePixelRatio());
     if ("outputColorSpace" in renderer) {
       renderer.outputColorSpace = THREE.SRGBColorSpace;
     }
@@ -862,7 +863,7 @@
 
   function addStars() {
     const geometry = new THREE.BufferGeometry();
-    const starCount = 1800;
+    const starCount = isPhoneViewport() ? 850 : 1800;
     const positions = new Float32Array(starCount * 3);
     const colors = new Float32Array(starCount * 3);
 
@@ -1201,6 +1202,7 @@
 
   function addDebrisCloud() {
     const debrisGroup = new THREE.Group();
+    const phoneMode = isPhoneViewport();
     const shellConfigs = [
       { altitudeKm: 420, color: 0x89ffd0, tiltDeg: 51.6 },
       { altitudeKm: 550, color: 0x7de8ff, tiltDeg: 53.2 },
@@ -1215,19 +1217,23 @@
       sceneObjects.debrisShells.push(shell);
     });
 
-    for (let index = 0; index < 520; index += 1) {
+    const shardCount = phoneMode ? 180 : 520;
+    const derelictCount = phoneMode ? 42 : 120;
+    const speckCount = phoneMode ? 3600 : 14000;
+
+    for (let index = 0; index < shardCount; index += 1) {
       const shard = createDebrisShard(index);
       debrisGroup.add(shard);
       sceneObjects.debrisPieces.push(shard);
     }
 
-    for (let index = 0; index < 120; index += 1) {
+    for (let index = 0; index < derelictCount; index += 1) {
       const derelict = createDerelictSatellite(index);
       debrisGroup.add(derelict);
       sceneObjects.debrisPieces.push(derelict);
     }
 
-    const debrisSpecks = createDebrisSpeckField(14000);
+    const debrisSpecks = createDebrisSpeckField(speckCount);
     debrisGroup.add(debrisSpecks);
     sceneObjects.debrisSpecks = debrisSpecks;
 
@@ -3508,7 +3514,16 @@
     const height = refs.sceneMount.clientHeight;
     sceneObjects.camera.aspect = width / height;
     sceneObjects.camera.updateProjectionMatrix();
+    sceneObjects.renderer.setPixelRatio(getScenePixelRatio());
     sceneObjects.renderer.setSize(width, height);
+  }
+
+  function isPhoneViewport() {
+    return PHONE_MEDIA_QUERY ? PHONE_MEDIA_QUERY.matches : window.innerWidth <= 700;
+  }
+
+  function getScenePixelRatio() {
+    return Math.min(window.devicePixelRatio || 1, isPhoneViewport() ? 1.35 : 2);
   }
 
   function createEarthTexture() {
