@@ -201,7 +201,7 @@
    * @property {Record<string, string>} labels
    */
 
-  // Coordinates are taken from the UPR study tables for the selected demo pair.
+  // Coordinates are taken from the SUPR-LEO study tables for the selected demo pair.
   /** @type {SiteConfig[]} */
   const SITE_CONFIGS = [
     {
@@ -229,8 +229,8 @@
       title: "Overview",
       open: true,
       paragraphs: [
-        "This demonstration scene introduces a passive radar concept for observing activity in low Earth orbit by pairing a terrestrial broadcast source with a receiving telescope.",
-        "Use this section for your final research-backed project summary, problem framing, and system-level explanation tailored to reviewers or judges.",
+        "This demonstration scene introduces Saudi Urban Passive Radar for LEO Debris Detection (SUPR-LEO), a passive radar concept for observing activity in low Earth orbit by pairing a terrestrial broadcast source with a receiving telescope.",
+        "Use this section for the final research-backed project summary, problem framing, and system-level explanation tailored to reviewers or judges.",
       ],
       bullets: [
         "Narrate the end-to-end signal path from illuminator to space object to receiver.",
@@ -291,7 +291,7 @@
       title: "Project Aims",
       open: false,
       paragraphs: [
-        "The project aims to demonstrate how a passive radar configuration can support space-object surveillance using existing emitters and a dedicated receiving node.",
+        "SUPR-LEO aims to demonstrate how a passive radar configuration can support space-object surveillance using existing emitters and a dedicated receiving node.",
         "Use this space for your objectives, expected contributions, and research roadmap.",
       ],
       bullets: [
@@ -2852,7 +2852,7 @@
   }
 
   function applyBundledN2yoSnapshot() {
-    const payload = window.UPR_N2YO_PASSES_SNAPSHOT;
+    const payload = window.SUPR_N2YO_PASSES_SNAPSHOT || window.UPR_N2YO_PASSES_SNAPSHOT;
     if (!payload || !Array.isArray(payload.passes)) {
       return false;
     }
@@ -3676,11 +3676,18 @@
   }
 
   function getN2yoApiKey() {
+    if (window.SUPR_N2YO_API_KEY && String(window.SUPR_N2YO_API_KEY).trim()) {
+      return String(window.SUPR_N2YO_API_KEY).trim();
+    }
     if (window.UPR_N2YO_API_KEY && String(window.UPR_N2YO_API_KEY).trim()) {
       return String(window.UPR_N2YO_API_KEY).trim();
     }
     try {
-      return String(window.localStorage.getItem("uprN2yoApiKey") || "").trim();
+      return String(
+        window.localStorage.getItem("suprN2yoApiKey") ||
+          window.localStorage.getItem("uprN2yoApiKey") ||
+          ""
+      ).trim();
     } catch (error) {
       return "";
     }
